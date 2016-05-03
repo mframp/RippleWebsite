@@ -1,0 +1,68 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Slider - Vertical slider</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="jquery.ui.touch-punch.min.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script>
+  $(function() {
+    $( "#slider-vertical" ).slider({
+      orientation: "vertical",
+      range: "min",
+      min: 0,
+      max: 100,
+      value: 60,
+      slide: function( event, ui ) {
+        $( "#amount" ).val( ui.value );
+        $( ".ui-slider .ui-slider-handle" ).attr( 'data-before', '$' + ui.value );
+      }
+    });
+    $( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
+    $( ".ui-slider .ui-slider-handle" ).attr( 'data-before', '$' + $( "#slider-vertical" ).slider( "value" ) )
+  });
+  </script>
+  <style>
+  .ui-slider {
+     border-radius: 25px;
+     margin-left: 100px;
+     background: silver;
+     border: none;
+  }
+  .ui-slider .ui-slider-handle {
+    width: 1px;
+    height: 1px;
+    border: none;
+    margin-left: 8px;
+    -ms-touch-action: none;
+    touch-action: none;
+    /*opacity: .1;*/
+  }
+  .ui-slider .ui-slider-handle::before{
+    background: #41d142;
+    color: white;
+    content: attr(data-before);
+    font-size: 10px;
+  }
+    .ui-slider-range {
+        border-radius: 25px;
+        background: #41d142;
+    }
+    </style>
+</head>
+<body>
+ 
+<p>
+  <label for="amount">Volume:</label>
+  <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+</p>
+ 
+<div id="slider-vertical" style="height:300px; width: 30px"></div>
+ 
+ 
+</body>
+</html>

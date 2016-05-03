@@ -1,0 +1,327 @@
+<html>
+
+<head>
+	<link rel="stylesheet" href="../css/main.css">
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,500,700,900' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300,700' rel='stylesheet' type='text/css'>
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="../js/jquery.sglide.2.1.2.min.js"></script>	
+	<script type="text/javascript" src="../js/slide.js"></script> 
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>   -->
+<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" ></script> -->
+</head>
+
+<body>
+	<div class="bar-info">
+		<h1>Slide v2</h1>
+		<div id="pos" data-before="0"> </div>
+		<div id="pos2" data-before="0"> </div>
+	</div>
+	<!-- <div class="bar-container">
+		<div id="bar1" class="bar"></div>
+		<div id="bar2" class="bar"></div>
+		<div id="bar3" class="bar"></div>
+
+	</div>
+
+	<div id="value" style="font-size:64px;"> 10</div>
+	<button id="flip"> flip </button> -->
+
+	<div class="my-container">
+		<div id="mySlider1" class="mySlider categoryBar">
+			<div class="sliderBar"></div>
+		</div>
+		<div id="mySlider2" class="mySlider categoryBar">
+			<div class="sliderBar"></div>
+		</div>
+		<div id="posX"></div>
+		<div id="posY"></div>
+	</div>
+</body>
+</html>
+
+<script>
+
+var CategoryBar = function( element ) {
+
+	this.element = element
+
+    	// var bar = $('#sliderBar')
+	var sliderContainer = $('#mySlider1')
+	var dragging = false
+	var startingY = 0
+	var startingX = 0
+	var toTopBar= 0
+	var bottomOfBar = sliderContainer.height() + sliderContainer.offset().top
+	var minHeight = 95
+
+	console.log(this)
+
+	this.construct = function() {
+		console.log('constructed')
+		this.element.on('mousedown', function( e ) {
+			e.preventDefault()
+			console.log( this )
+			doDown( e, this, 'click' )		
+		});
+	}
+		
+}
+
+	
+
+	// console.log('down')
+
+	// startingY = bar.offset().top
+ //    startingX = bar.offset().left
+
+ //  	var toTopBar = ''
+ //  	var moveType = ''
+ //  	var pageY = 0
+ //  	dragging = true
+
+	// // Need distance between click and top of bar
+	// if(type == 'click') {
+	// 	toTopBar = e.originalEvent.pageY - startingY
+	// 	moveType = 'mousemove'
+	// } else if (type == 'touch') {
+	// 	var toTopBar = e.originalEvent.touches[0].pageY - startingY
+	// 	moveType = 'touchmove'
+	// }		
+	
+	// $(document).on( moveType, function( e ) {
+	//     	e.preventDefault()
+	//     	if(type == 'click') {
+	// 		pageY = e.originalEvent.pageY
+	// 	} else if (type == 'touch') {
+	// 		pageY = e.originalEvent.touches[0].pageY 
+	// 	}
+ //    	var top =  pageY - toTopBar
+ //    	var newHeight = bottomOfBar - top 
+ //    	bar.height( newHeight ) 
+
+	//     	if (bar.hasClass('at-bottom') && bar.height() > minHeight) {
+	//     		bar.removeClass('at-bottom')
+	//     	}
+	//     	if (bar.height() > $('#mySlider').height()) {
+	//     		// bar.offset({ 'top': top, 'left': startingX })
+	//     		bar.height( $('#mySlider').height() )
+	// 		$('#pos').attr( 'data-before', $('#mySlider').height() + " " + newHeight)
+	// 	}
+	// 	else if( bar.height() < minHeight ) {
+	// 		bar.addClass('at-bottom')
+	// 	}
+
+	// });
+
+function doDown( e, object, type ) {
+	console.log(object)
+	// var element = object.element
+	// console.log(element)
+	
+	startingY = element.offset().top
+    startingX = element.offset().left
+
+  	var toTopBar = ''
+  	var moveType = ''
+  	var pageY = 0
+  	dragging = true
+
+	// Need distance between click and top of bar
+	if(type == 'click') {
+		toTopBar = e.originalEvent.pageY - startingY
+		moveType = 'mousemove'
+	} 
+	else if (type == 'touch') {
+		var toTopBar = e.originalEvent.touches[0].pageY - startingY
+		moveType = 'touchmove'
+	}		
+	
+	$(document).on( moveType, function( e ) {
+	    e.preventDefault()
+
+	    if(type == 'click') {
+			pageY = e.originalEvent.pageY
+		} 
+		else if (type == 'touch') {
+			pageY = e.originalEvent.touches[0].pageY 
+		}
+
+    	var top =  pageY - toTopBar
+    	var newHeight = bottomOfBar - top 
+    	element.height( newHeight ) 
+
+    	if (element.hasClass('at-bottom') && element.height() > minHeight) {
+    		element.removeClass('at-bottom')
+    	}
+    	if (element.height() > $('#mySlider').height()) {
+    		// bar.offset({ 'top': top, 'left': startingX })
+    		element.height( $('#mySlider').height() )
+			$('#pos').attr( 'data-before', $('#mySlider').height() + " " + newHeight)
+		}
+		else if ( element.height() < minHeight ) {
+			element.addClass('at-bottom')
+		}
+
+	});
+}
+
+function doMove() {
+
+}
+
+$(document).ready( function() {
+
+	// Initialize bars
+	var bars = []
+	$(".categoryBar").each( function () {
+		var temp = new CategoryBar( $( this ) )
+		temp.construct()
+		bars.push(temp)
+	})
+
+	$(document).on('touchend', function( e ) {
+		//use changedTouches
+		dragging = false;
+		$(document).unbind('touchmove');
+	});
+	$(document).on('mouseup', function( e ) {
+		dragging = false;
+		$(document).unbind('mousemove');
+	});
+
+	function doDown( e, element, type ) {
+		console.log(element)
+
+		startingY = element.offset().top
+	    	startingX = element.offset().left
+
+	  	var toTopBar = ''
+	  	var moveType = ''
+	  	var pageY = 0
+	  	dragging = true
+
+		// Need distance between click and top of bar
+		if(type == 'click') {
+			toTopBar = e.originalEvent.pageY - startingY
+			moveType = 'mousemove'
+		} else if (type == 'touch') {
+			var toTopBar = e.originalEvent.touches[0].pageY - startingY
+			moveType = 'touchmove'
+		}		
+		
+		$(document).on( moveType, function( e ) {
+   	    	e.preventDefault()
+   	    	if(type == 'click') {
+				pageY = e.originalEvent.pageY
+			} else if (type == 'touch') {
+				pageY = e.originalEvent.touches[0].pageY 
+			}
+	    	var top =  pageY - toTopBar
+	    	var newHeight = bottomOfBar - top 
+	    	element.height( newHeight ) 
+
+   	    	if (element.hasClass('at-bottom') && element.height() > minHeight) {
+   	    		element.removeClass('at-bottom')
+   	    	}
+   	    	if (element.height() > $('#mySlider').height()) {
+   	    		// bar.offset({ 'top': top, 'left': startingX })
+   	    		element.height( $('#mySlider').height() )
+    			$('#pos').attr( 'data-before', $('#mySlider').height() + " " + newHeight)
+    		}
+    		else if( element.height() < minHeight ) {
+    			element.addClass('at-bottom')
+    		}
+
+   		});
+	}
+
+	// bar.on('mousedown', function( e ) {
+	// 	e.preventDefault()
+	// 	doDown( e, 'click' )		
+	// });
+
+	// bar.on('touchstart', function( e ) {
+	// 	e.preventDefault()
+	// 	doDown( e, 'touch' )
+	// })
+});
+
+
+
+</script>
+
+<style>
+
+.bar-info {
+	height: 200px;
+}
+#pos::before {
+	content: attr(data-before);
+	font-size: 64px;
+}
+#pos2::before {
+	content: attr(data-before);
+	font-size: 64px;
+}
+.sliderBar {
+	background-color: black;
+	height: 20%;
+	width: 100%;
+	min-height: 90px;
+	position: absolute;
+	bottom: 0;
+	border-radius: 100px;
+	z-index: 1;
+
+}
+.sliderBar::before {
+	content: "$100";
+	/*margin-left: 38%;*/
+    position: relative;
+    top: -40;
+    left: 20%;
+    font-size: 32px;
+}
+.my-container{
+	width: 100%;
+	height: 100%;
+	background-color: yellow;
+	overflow: auto;
+	z-index: 3;
+
+}
+.mySlider {
+	position: relative;
+	margin-left: 100px;
+	margin-top: 2%;
+	height: 70%;
+	width: 10%;
+	background-color: silver;
+	border-radius: 75px;
+	display: inline-block;
+}
+.sliderBar.at-bottom {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	/*background-color: transparent;*/
+}
+* {
+	font-family: Helvetica;
+}
+
+@media(min-device-width: 580px) {
+/*#mySlider {
+	height: 400px;
+	width: 100px;
+	background-color: silver;
+}
+.my-container {
+	height: 500px;
+	width: 500px;
+
+	background-color: tan;
+}*/
+}
+
+</style>
